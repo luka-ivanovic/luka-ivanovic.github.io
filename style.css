@@ -1,5 +1,9 @@
 body{
-    background: rgb(0,0,0, 0.9);
+    background: rgba(0, 0, 0, 0.9); /* use rgba instead of rgb with 4 values */
+    max-width: 1920px;
+    max-height: 1080px;
+    margin: 0;
+    padding: 0;
 }
 
 pre{
@@ -10,4 +14,23 @@ pre{
 
     width: fit-content;
     align-content: center;
+}
+
+.logo-container {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 2rem;
+}
+
+.github-img img,
+.linkedin-img img {
+    width: 50px;
+    height: auto;
+    display: block;
 }
