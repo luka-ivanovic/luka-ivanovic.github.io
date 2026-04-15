@@ -23,7 +23,7 @@ body{
 
 pre{
     color: white;
-    margin: 3rem auto 0;
+    margin: 3rem 1rem 0rem;
     width: fit-content;
     align-content: center;
 }
@@ -62,11 +62,6 @@ pre{
         margin-top: 1.5rem;
     }
     .pre-wrapper{
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-
         margin-top: 1.5rem;
         margin-bottom: 1.5rem
     }

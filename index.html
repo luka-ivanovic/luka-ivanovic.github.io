@@ -2,20 +2,22 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Luka - Dev </title>
+    <title>Luka Ivanovic – Developer</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
-    <link rel="stylesheet" type="text/css" href="style.css">
+    <link rel="stylesheet" href="style.css">
     <link rel="icon" type="image/svg+xml" href="img/Lambda_lc.svg">
 </head>
+
 <body>
 
-<header>
+<!-- TODO: add header and nav -->
 
-</header>
+<main id="main-content">
+    <section class="pre-wrapper" aria-label="ASCII art">
 
-<div class="pre-wrapper">
-<div class="name-wrapper">
-<pre>
+        <div class="name-wrapper">
+
+            <pre aria-label="Stylized ASCII art of the name Luka">
  __                 __
 |  \               |  \
 | $$      __    __ | $$   __  ______
@@ -25,8 +27,9 @@
 | $$_____| $$__/ $$| $$$$$$\|  $$$$$$$
 | $$     \\$$    $$| $$  \$$\\$$    $$
  \$$$$$$$$ \$$$$$$  \$$   \$$ \$$$$$$$
-</pre>
-<pre class="ivanovicAscii">
+            </pre>
+
+            <pre class="ivanovicAscii" aria-label="Stylized ASCII art of the surname Ivanovic">
  ______                                                   __
 |      \                                                 |  \
  \$$$$$$__     __  ______   _______    ______  __     __  \$$  _______
@@ -36,9 +39,11 @@
  _| $$_   \$$ $$ |  $$$$$$$| $$  | $$| $$__/ $$  \$$ $$  | $$| $$_____
 |   $$ \   \$$$   \$$    $$| $$  | $$ \$$    $$   \$$$   | $$ \$$     \
  \$$$$$$    \$     \$$$$$$$ \$$   \$$  \$$$$$$     \$     \$$  \$$$$$$$
-</pre>
-</div>
-<pre>
+            </pre>
+
+        </div>
+
+        <pre aria-label="Stylized ASCII art text">
  __   __   __   ______    _______
 |  \ |  \ |  \ |      \  /       \
 | $$ | $$ | $$  \$$$$$$\|  $$$$$$$
@@ -46,8 +51,9 @@
 | $$_/ $$_/ $$|  $$$$$$$ _\$$$$$$\
  \$$   $$   $$ \$$    $$|       $$
   \$$$$$\$$$$   \$$$$$$$ \$$$$$$$
-</pre>
-<pre>
+        </pre>
+
+        <pre aria-label="Stylized ASCII art text">
  __    __
 |  \  |  \
 | $$  | $$  ______    ______    ______
@@ -57,23 +63,27 @@
 | $$  | $$| $$$$$$$$| $$      | $$$$$$$$
 | $$  | $$ \$$     \| $$       \$$     \
  \$$   \$$  \$$$$$$$ \$$        \$$$$$$$
-</pre>
-</div>
+        </pre>
 
-<div class="logo-container">
-    <div class="github-img">
-        <a href="https://github.com/luka-ivanovic" target="_blank" rel="noopener noreferrer">
-            <img src="img/GitHub_Invertocat_Logo.svg" alt="GitHub Logo">
+    </section>
+</main>
+
+<footer>
+    <div class="logo-container">
+        <a href="https://github.com/luka-ivanovic"
+           target="_blank"
+           rel="noopener noreferrer"
+           aria-label="Visit Luka Ivanovic's GitHub profile">
+            <img src="img/GitHub_Invertocat_Logo.svg" alt="">
+        </a>
+        <a href="https://www.linkedin.com/in/luka-ivanovic-"
+           target="_blank"
+           rel="noopener noreferrer"
+           aria-label="Visit Luka Ivanovic's LinkedIn profile">
+            <img src="img/LinkedIn_logo_initials.png" alt="">
         </a>
     </div>
-
-    <div class="linkedin-img">
-        <a href="https://www.linkedin.com/in/luka-ivanovic-" target="_blank" rel="noopener noreferrer">
-            <img src="img/LinkedIn_logo_initials.png" alt="LinkedIn Logo">
-        </a>
-    </div>
-</div>
-
+</footer>
 </body>
 
 </html>
