@@ -643,6 +643,10 @@ document.getElementById("year").textContent = new Date().getFullYear();
         }
     });
 
+    document.getElementById("shell-btn").addEventListener("click", () => {
+        input.focus({ preventScroll: true });
+    });
+
     term.addEventListener("click", () => {
         if (!window.getSelection().toString()) input.focus();
     });
