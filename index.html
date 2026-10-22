@@ -3,21 +3,50 @@
 <head>
     <meta charset="UTF-8">
     <title>Luka Ivanovic – Developer</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Luka Ivanovic – Computer Science student at TU Wien focused on IT security, reverse engineering and low-level programming.">
+    <meta name="theme-color" content="#0a0c0d">
+    <meta property="og:title" content="Luka Ivanovic – Developer">
+    <meta property="og:description" content="CS student at TU Wien · IT security · reverse engineering · C on Linux.">
+    <meta property="og:url" content="https://lukaivanovic.dev/">
+    <meta property="og:type" content="website">
+    <link rel="canonical" href="https://lukaivanovic.dev/">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;800&display=swap">
     <link rel="stylesheet" href="style.css">
     <link rel="icon" type="image/svg+xml" href="img/Lambda_lc.svg">
+    <script src="script.js" defer></script>
 </head>
 
 <body>
 
-<!-- TODO: add header and nav -->
+<a class="skip-link" href="#main-content">Skip to content</a>
+
+<header class="site-header">
+    <a class="brand" href="#top" aria-label="Back to top">
+        <img src="img/Lambda_lc.svg" alt="">
+        <span>luka<span class="dim">@</span>dev<span class="dim">:~$</span></span>
+    </a>
+    <nav aria-label="Main">
+        <ul>
+            <li><a href="#about">whoami</a></li>
+            <li><a href="#projects">projects</a></li>
+            <li><a href="#skills">skills</a></li>
+            <li><a href="#contact">contact</a></li>
+        </ul>
+    </nav>
+</header>
 
 <main id="main-content">
-    <section class="pre-wrapper" aria-label="ASCII art">
 
-        <div class="name-wrapper">
+    <section id="top" class="hero pre-wrapper" aria-label="Introduction">
 
-            <pre aria-label="Stylized ASCII art of the name Luka">
+        <h1 class="visually-hidden">Luka Ivanovic</h1>
+
+        <div class="name-wrapper" aria-hidden="true">
+
+            <pre class="ascii ascii-name">
  __                 __
 |  \               |  \
 | $$      __    __ | $$   __  ______
@@ -29,7 +58,7 @@
  \$$$$$$$$ \$$$$$$  \$$   \$$ \$$$$$$$
             </pre>
 
-            <pre class="ivanovicAscii" aria-label="Stylized ASCII art of the surname Ivanovic">
+            <pre class="ascii ascii-name ivanovicAscii">
  ______                                                   __
 |      \                                                 |  \
  \$$$$$$__     __  ______   _______    ______  __     __  \$$  _______
@@ -43,7 +72,18 @@
 
         </div>
 
-        <pre aria-label="Stylized ASCII art text">
+        <p class="tagline">
+            <span class="prompt">&gt;</span>
+            <span id="typed" data-lines="CS student @ TU Wien|IT security · reverse engineering · CTFs|segfaults are just suggestions">CS student @ TU Wien</span><span class="cursor" aria-hidden="true">█</span>
+        </p>
+
+        <div class="hero-actions">
+            <a class="btn btn-primary" href="#projects">[ ls projects/ ]</a>
+            <a class="btn" href="https://github.com/luka-ivanovic" target="_blank" rel="noopener noreferrer">[ github ]</a>
+        </div>
+
+        <div class="was-here" aria-hidden="true">
+            <pre class="ascii ascii-small">
  __   __   __   ______    _______
 |  \ |  \ |  \ |      \  /       \
 | $$ | $$ | $$  \$$$$$$\|  $$$$$$$
@@ -51,9 +91,9 @@
 | $$_/ $$_/ $$|  $$$$$$$ _\$$$$$$\
  \$$   $$   $$ \$$    $$|       $$
   \$$$$$\$$$$   \$$$$$$$ \$$$$$$$
-        </pre>
+            </pre>
 
-        <pre aria-label="Stylized ASCII art text">
+            <pre class="ascii ascii-small">
  __    __
 |  \  |  \
 | $$  | $$  ______    ______    ______
@@ -63,12 +103,97 @@
 | $$  | $$| $$$$$$$$| $$      | $$$$$$$$
 | $$  | $$ \$$     \| $$       \$$     \
  \$$   \$$  \$$$$$$$ \$$        \$$$$$$$
-        </pre>
+            </pre>
+        </div>
 
     </section>
+
+    <section id="about" class="section reveal">
+        <h2 class="cmd"><span class="ps1">luka@dev:~$</span> whoami</h2>
+        <p class="out out-name">Luka Ivanovic</p>
+        <p class="cmd"><span class="ps1">luka@dev:~$</span> cat ./About_Me</p>
+        <div class="about">
+            <p><span class="gt">&gt;</span> CS student @ <strong>TU Wien</strong></p>
+            <p><span class="gt">&gt;</span> Interests</p>
+            <ul>
+                <li>Reverse Engineering</li>
+                <li>Binary Analysis</li>
+                <li>CTFs</li>
+                <li>Cryptography</li>
+            </ul>
+            <p><span class="gt">&gt;</span> Currently digging into</p>
+            <ul>
+                <li>Blockchain</li>
+                <li>Privacy-Enhancing Technologies</li>
+            </ul>
+        </div>
+    </section>
+
+    <section id="projects" class="section reveal">
+        <h2 class="cmd"><span class="ps1">luka@dev:~$</span> ls -l projects/</h2>
+        <div class="cards">
+            <article class="card">
+                <header>
+                    <span class="perm">drwxr-xr-x</span>
+                    <h3>kerma-node/</h3>
+                </header>
+                <p>Node for a simplified Bitcoin-like network: concurrent TCP peers, canonical JSON messaging with stream defragmentation, handshake and protocol error handling, and peer discovery with a persistent peer list.</p>
+                <ul class="tags"><li>Python</li><li>asyncio</li><li>Docker</li></ul>
+            </article>
+            <article class="card">
+                <header>
+                    <span class="perm">drwxr-xr-x</span>
+                    <h3>systems-c/</h3>
+                </header>
+                <p>Client–server 3-coloring solver over shared memory, a recursive <code>fork</code>/<code>exec</code> sort over pipes, and a <code>grep</code> clone.</p>
+                <ul class="tags"><li>C</li><li>POSIX</li><li>Make</li></ul>
+                <a class="card-link" href="https://github.com/luka-ivanovic/C_Exercises" target="_blank" rel="noopener noreferrer">source →</a>
+            </article>
+            <article class="card">
+                <header>
+                    <span class="perm">drwxr-xr-x</span>
+                    <h3>gameio/</h3>
+                </header>
+                <p>Website for a fictional games marketplace, built with a focus on accessibility and legal compliance.</p>
+                <ul class="tags"><li>HTML</li><li>CSS</li><li>JavaScript</li></ul>
+                <a class="card-link" href="https://lukaivanovic.dev/gameio/" target="_blank" rel="noopener noreferrer">live →</a>
+            </article>
+        </div>
+    </section>
+
+    <section id="skills" class="section reveal">
+        <h2 class="cmd"><span class="ps1">luka@dev:~$</span> cat skills.conf</h2>
+        <div class="config">
+            <p><span class="key">programming</span> = <span class="val">[Java, C, Python, JavaScript, HTML/CSS, Bash, LaTeX]</span></p>
+            <p><span class="key">security</span>    = <span class="val">[Reverse Engineering, Binary Analysis, Cryptography, CTFs]</span></p>
+            <p><span class="key">sec_tools</span>   = <span class="val">[IDA, GDB (Pwndbg), x64dbg]</span></p>
+            <p><span class="key">databases</span>   = <span class="val">[SQL, PostgreSQL]</span></p>
+            <p><span class="key">tools</span>       = <span class="val">[Git, GitHub/GitLab, Docker, Maven]</span></p>
+            <p><span class="key">os</span>          = <span class="val">[Linux (Debian, Fedora, Arch), Windows]</span></p>
+        </div>
+    </section>
+
+    <section id="contact" class="section reveal">
+        <h2 class="cmd"><span class="ps1">luka@dev:~$</span> ./contact --interactive</h2>
+        <div class="terminal" id="terminal">
+            <div class="terminal-bar" aria-hidden="true">
+                <span></span><span></span><span></span>
+                <em>bash — luka@dev</em>
+            </div>
+            <div class="terminal-body" id="terminal-output" aria-live="polite">
+                <p>Welcome! Type <kbd>help</kbd> to see what you can do here.</p>
+                <p class="dim">Rumour has it there's a flag hidden somewhere on this box.</p>
+            </div>
+            <form class="terminal-input" id="terminal-form" autocomplete="off">
+                <label for="terminal-cmd" class="ps1" id="terminal-ps1">guest@dev:~$</label>
+                <input id="terminal-cmd" type="text" spellcheck="false" autocapitalize="off" aria-label="Terminal command">
+            </form>
+        </div>
+    </section>
+
 </main>
 
-<footer>
+<footer class="site-footer">
     <div class="logo-container">
         <a href="https://github.com/luka-ivanovic"
            target="_blank"
@@ -83,6 +208,7 @@
             <img src="img/LinkedIn_logo_initials.png" alt="">
         </a>
     </div>
+    <p class="dim">© <span id="year">2026</span> Luka Ivanovic · <span class="blink-dot">●</span> online</p>
 </footer>
 </body>
 
