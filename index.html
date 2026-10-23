@@ -5,7 +5,7 @@
     <title>Luka Ivanovic – Developer</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="Luka Ivanovic – Computer Science student at TU Wien focused on IT security, reverse engineering and low-level programming.">
-    <meta name="theme-color" content="#0a0c0d">
+    <meta name="theme-color" content="#03040a">
     <meta property="og:title" content="Luka Ivanovic – Developer">
     <meta property="og:description" content="CS student at TU Wien · IT security · reverse engineering · C on Linux.">
     <meta property="og:url" content="https://lukaivanovic.dev/">
@@ -16,10 +16,22 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;800&display=swap">
     <link rel="stylesheet" href="style.css">
     <link rel="icon" type="image/svg+xml" href="img/Lambda_lc.svg">
+    <script>
+        try { if (localStorage.getItem("mode") === "light") document.documentElement.dataset.mode = "light"; } catch {}
+    </script>
     <script src="script.js" defer></script>
 </head>
 
 <body>
+
+<div class="signs" aria-hidden="true">
+    <span>営業中</span>
+    <span>喫茶 ネオン</span>
+    <span>カラオケ</span>
+    <span>ゲームセンター</span>
+    <span>酒場</span>
+    <span>深夜営業</span>
+</div>
 
 <a class="skip-link" href="#main-content">Skip to content</a>
 
@@ -36,6 +48,12 @@
             <li><a href="#contact">contact</a></li>
         </ul>
     </nav>
+    <button class="mode-toggle" id="mode-toggle" type="button" aria-pressed="false" aria-label="Toggle light mode">
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
+            <circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2"/>
+            <path d="M12 3a9 9 0 0 0 0 18z" fill="currentColor"/>
+        </svg>
+    </button>
 </header>
 
 <main id="main-content">
@@ -181,7 +199,6 @@
         <h2 class="cmd"><span class="ps1">luka@dev:~$</span> ./contact --interactive</h2>
         <div class="terminal" id="terminal">
             <div class="terminal-bar" aria-hidden="true">
-                <span></span><span></span><span></span>
                 <em>bash — luka@dev</em>
             </div>
             <div class="terminal-body" id="terminal-output" aria-live="polite">
@@ -193,27 +210,28 @@
                 <input id="terminal-cmd" type="text" spellcheck="false" autocapitalize="off" aria-label="Terminal command">
             </form>
         </div>
+
+        <footer class="site-footer">
+            <div class="logo-container">
+                <a href="https://github.com/luka-ivanovic"
+                   target="_blank"
+                   rel="noopener noreferrer"
+                   aria-label="Visit Luka Ivanovic's GitHub profile">
+                    <img src="img/GitHub_Invertocat_Logo.svg" alt="">
+                </a>
+                <a href="https://www.linkedin.com/in/luka-ivanovic-"
+                   target="_blank"
+                   rel="noopener noreferrer"
+                   aria-label="Visit Luka Ivanovic's LinkedIn profile">
+                    <img src="img/LinkedIn_logo_initials.png" alt="">
+                </a>
+            </div>
+            <p class="dim">© <span id="year">2026</span> Luka Ivanovic · <span class="blink-dot">●</span> online</p>
+        </footer>
     </section>
 
 </main>
 
-<footer class="site-footer">
-    <div class="logo-container">
-        <a href="https://github.com/luka-ivanovic"
-           target="_blank"
-           rel="noopener noreferrer"
-           aria-label="Visit Luka Ivanovic's GitHub profile">
-            <img src="img/GitHub_Invertocat_Logo.svg" alt="">
-        </a>
-        <a href="https://www.linkedin.com/in/luka-ivanovic-"
-           target="_blank"
-           rel="noopener noreferrer"
-           aria-label="Visit Luka Ivanovic's LinkedIn profile">
-            <img src="img/LinkedIn_logo_initials.png" alt="">
-        </a>
-    </div>
-    <p class="dim">© <span id="year">2026</span> Luka Ivanovic · <span class="blink-dot">●</span> online</p>
-</footer>
 </body>
 
 </html>

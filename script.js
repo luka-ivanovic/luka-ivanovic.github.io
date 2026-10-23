@@ -2,6 +2,28 @@ const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matc
 
 document.getElementById("year").textContent = new Date().getFullYear();
 
+// light / dark mode
+(function modeToggle(){
+    const btn = document.getElementById("mode-toggle");
+    const meta = document.querySelector('meta[name="theme-color"]');
+
+    function sync(){
+        const light = document.documentElement.dataset.mode === "light";
+        btn.setAttribute("aria-pressed", String(light));
+        meta.content = light ? "#f6f2f7" : "#03040a";
+    }
+
+    btn.addEventListener("click", () => {
+        const light = document.documentElement.dataset.mode !== "light";
+        if (light) document.documentElement.dataset.mode = "light";
+        else delete document.documentElement.dataset.mode;
+        try { localStorage.setItem("mode", light ? "light" : "dark"); } catch {}
+        sync();
+    });
+
+    sync();
+})();
+
 // typewriter tagline
 (function typewriter(){
     const el = document.getElementById("typed");
@@ -100,6 +122,7 @@ document.getElementById("year").textContent = new Date().getFullYear();
     const listing = "kerma-node/  systems-c/  gameio/  README.md  crackme*  flag.txt";
 
     const themes = {
+        neon: ["#d41c74", "#e661a3"],
         green: ["#7ee787", "#56d4dd"],
         amber: ["#ffb000", "#ffd27a"],
         cyan: ["#56d4dd", "#a5b4fc"],
@@ -667,7 +690,7 @@ document.getElementById("year").textContent = new Date().getFullYear();
         const timer = setInterval(() => {
             ctx.fillStyle = "rgba(0,0,0,0.08)";
             ctx.fillRect(0, 0, canvas.width, canvas.height);
-            ctx.fillStyle = "#7ee787";
+            ctx.fillStyle = "#d41c74";
             ctx.font = size + "px monospace";
             drops.forEach((y, i) => {
                 ctx.fillText(chars[Math.floor(Math.random() * chars.length)], i * size, y * size);
@@ -700,6 +723,6 @@ document.getElementById("year").textContent = new Date().getFullYear();
 // hello, fellow source reader
 console.log(
     "%c λ lukaivanovic.dev %c\n\nPoking around in devtools? Respect.\nThere's a terminal at the bottom of the page and a flag hidden in it.\nHint: real hackers read the history.",
-    "background:#7ee787;color:#0a0c0d;font-weight:bold;padding:4px 8px;font-family:monospace",
-    "color:#7ee787;font-family:monospace"
+    "background:#d41c74;color:#03040a;font-weight:bold;padding:4px 8px;font-family:monospace",
+    "color:#d41c74;font-family:monospace"
 );
