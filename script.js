@@ -24,6 +24,199 @@ document.getElementById("year").textContent = new Date().getFullYear();
     sync();
 })();
 
+// conway's game of life in the background, toggled with the `life` terminal command.
+// deliberately not persisted: every page load starts with it off.
+// performance: the canvas holds one pixel per cell (~100x65 px) and CSS scales it up with
+// crisp edges; a static CSS mask cuts the gaps between cells. Each tick is one tiny putImageData.
+const gameOfLife = (function life(){
+    const canvas = document.getElementById("life");
+    if (!canvas || !canvas.getContext) return { toggle: () => false, retheme(){} };
+    const ctx = canvas.getContext("2d", { alpha: true });
+    const CELL = 14;      // css px per cell, keep in sync with mask-size in style.css
+    const TICK = 100;     // ms per generation (~10 per second)
+    const FADE = 0.7;     // how quickly dead cells leave their trail
+
+    const PATTERNS = {
+        glider:  [".#.", "..#", "###"],
+        lwss:    [".#..#", "#....", "#...#", "####."],
+        blinker: ["###"],
+        toad:    [".###", "###."],
+        beacon:  ["##..", "##..", "..##", "..##"],
+        pulsar: [
+            "..###...###..",
+            ".............",
+            "#....#.#....#",
+            "#....#.#....#",
+            "#....#.#....#",
+            "..###...###..",
+            ".............",
+            "..###...###..",
+            "#....#.#....#",
+            "#....#.#....#",
+            "#....#.#....#",
+            ".............",
+            "..###...###..",
+        ],
+    };
+
+    let cols = 0, rows = 0, gen = 0, timer = null, enabled = false;
+    let alive = null, next = null, fade = null, weight = null, left = null, right = null;
+    let image = null, pixels = null;
+    let colour = 0x741cd4, scale = 0.17 * 255;   // packed little-endian RGB, max alpha
+    const rnd = n => Math.floor(Math.random() * n);
+
+    // pattern -> cell offsets, in a random one of its 8 orientations
+    function cells(pattern){
+        let pts = [];
+        pattern.forEach((row, y) => [...row].forEach((c, x) => { if (c === "#") pts.push([x, y]); }));
+        if (Math.random() < 0.5) pts = pts.map(([x, y]) => [-x, y]);
+        if (Math.random() < 0.5) pts = pts.map(([x, y]) => [x, -y]);
+        if (Math.random() < 0.5) pts = pts.map(([x, y]) => [y, x]);
+        return pts;
+    }
+
+    function place(name, ox, oy){
+        for (const [x, y] of cells(PATTERNS[name])){
+            const i = (((oy + y) % rows + rows) % rows) * cols + (((ox + x) % cols + cols) % cols);
+            alive[i] = 1;
+            fade[i] = 1;
+        }
+    }
+
+    function seed(){
+        const n = Math.max(6, Math.round(cols * rows / 900));
+        for (let i = 0; i < n; i++) place("glider", rnd(cols), rnd(rows));
+        for (let i = 0; i < Math.ceil(n / 5); i++) place("lwss", rnd(cols), rnd(rows));
+        ["blinker", "toad", "beacon", "blinker", "beacon"].forEach(k => place(k, rnd(cols), rnd(rows)));
+        if (cols > 40 && rows > 30) place("pulsar", rnd(cols), rnd(rows));
+    }
+
+    // read the accent colour once per theme change instead of every frame
+    function readTheme(){
+        const root = document.documentElement;
+        const m = /^#([0-9a-f]{6})$/i.exec(getComputedStyle(root).getPropertyValue("--accent").trim());
+        if (m){
+            const v = parseInt(m[1], 16);
+            colour = (v >> 16) | (v & 0xff00) | ((v & 0xff) << 16);
+        }
+        scale = (root.dataset.mode === "light" ? 0.08 : 0.17) * 255;
+    }
+
+    function resize(){
+        const nc = Math.ceil(window.innerWidth / CELL), nr = Math.ceil(window.innerHeight / CELL);
+        if (nc === cols && nr === rows) return;
+
+        // keep whatever overlaps, so mobile toolbar resizes don't reset the board
+        const na = new Uint8Array(nc * nr), nf = new Float32Array(nc * nr);
+        const fresh = !alive;
+        if (alive){
+            for (let y = 0; y < Math.min(rows, nr); y++){
+                for (let x = 0; x < Math.min(cols, nc); x++){
+                    na[y * nc + x] = alive[y * cols + x];
+                    nf[y * nc + x] = fade[y * cols + x];
+                }
+            }
+        }
+        cols = nc; rows = nr; alive = na; fade = nf;
+        next = new Uint8Array(nc * nr);
+
+        // wrap-around neighbour columns, so the hot loop has no modulo
+        left = new Int32Array(nc); right = new Int32Array(nc);
+        for (let x = 0; x < nc; x++){ left[x] = (x - 1 + nc) % nc; right[x] = (x + 1) % nc; }
+
+        // vignette baked into the cells: dimmer behind the content column, full strength at the edges
+        weight = new Float32Array(nc * nr);
+        for (let y = 0; y < nr; y++){
+            for (let x = 0; x < nc; x++){
+                const dx = ((x + 0.5) / nc - 0.5) / 0.6, dy = ((y + 0.5) / nr - 0.45) / 0.65;
+                weight[y * nc + x] = 0.3 + 0.7 * Math.min(Math.hypot(dx, dy) / 0.8, 1);
+            }
+        }
+
+        canvas.width = nc;
+        canvas.height = nr;
+        canvas.style.width = nc * CELL + "px";
+        canvas.style.height = nr * CELL + "px";
+        image = ctx.createImageData(nc, nr);
+        pixels = new Uint32Array(image.data.buffer);
+        if (fresh) seed();
+        draw();
+    }
+
+    function step(){
+        let pop = 0;
+        for (let y = 0; y < rows; y++){
+            const up = (y === 0 ? rows - 1 : y - 1) * cols, mid = y * cols, dn = (y === rows - 1 ? 0 : y + 1) * cols;
+            for (let x = 0; x < cols; x++){
+                const l = left[x], r = right[x];
+                const n = alive[up + l] + alive[up + x] + alive[up + r]
+                        + alive[mid + l]                 + alive[mid + r]
+                        + alive[dn + l] + alive[dn + x] + alive[dn + r];
+                const i = mid + x;
+                const v = (n === 3 || (n === 2 && alive[i] === 1)) ? 1 : 0;
+                next[i] = v;
+                pop += v;
+                fade[i] = v ? 1 : (fade[i] < 0.04 ? 0 : fade[i] * FADE);
+            }
+        }
+        const t = alive; alive = next; next = t;   // swap buffers, no allocation
+        gen++;
+        // keep it moving: a fresh spaceship now and then, more often when things die down
+        if (gen % 40 === 0 || pop < cols * rows / 400){
+            place(Math.random() < 0.8 ? "glider" : "lwss", rnd(cols), rnd(rows));
+        }
+    }
+
+    function draw(){
+        for (let i = 0; i < pixels.length; i++){
+            const a = ((alive[i] ? 1 : fade[i] * 0.5) * weight[i] * scale) | 0;
+            pixels[i] = a === 0 ? 0 : (colour | (a << 24)) >>> 0;
+        }
+        ctx.putImageData(image, 0, 0);
+    }
+
+    function start(){
+        if (!enabled || timer || reducedMotion) return;
+        timer = setInterval(() => { step(); requestAnimationFrame(draw); }, TICK);
+    }
+    function stop(){ clearInterval(timer); timer = null; }
+
+    function enable(){
+        enabled = true;
+        gen = 0;
+        readTheme();
+        resize();               // first resize after a reset seeds a fresh board
+        canvas.hidden = false;
+        start();
+    }
+
+    function disable(){
+        enabled = false;
+        stop();
+        canvas.hidden = true;
+        cols = rows = 0;        // drop the board so the next `life` starts fresh
+        alive = next = fade = weight = null;
+    }
+
+    let resizeTimer;
+    window.addEventListener("resize", () => {
+        if (!enabled) return;
+        clearTimeout(resizeTimer);
+        resizeTimer = setTimeout(resize, 150);
+    });
+    document.addEventListener("visibilitychange", () => (document.hidden ? stop() : start()));
+    document.getElementById("mode-toggle").addEventListener("click", () => {
+        if (!enabled) return;
+        readTheme();
+        draw();
+    });
+
+    return {
+        toggle(){ enabled ? disable() : enable(); return enabled; },
+        retheme(){ if (enabled){ readTheme(); draw(); } },
+    };
+})();
+
 // typewriter tagline
 (function typewriter(){
     const el = document.getElementById("typed");
@@ -201,6 +394,7 @@ document.getElementById("year").textContent = new Date().getFullYear();
             "  neofetch    system info",
             "  fortune     words of wisdom",
             "  theme <c>   change colors (green, amber, cyan, red, purple)",
+            "  life        conway's game of life in the background",
             "  flags       your CTF score",
             "  hint        stuck? ask for a hint",
             "  history     command history",
@@ -424,9 +618,18 @@ document.getElementById("year").textContent = new Date().getFullYear();
             const name = (args[0] || "").toLowerCase();
             if (!themes[name]) return ["usage: theme <" + Object.keys(themes).join("|") + ">"];
             applyTheme(name);
+            gameOfLife.retheme();
             try { localStorage.setItem("theme", name); } catch {}
             return [{ cls: "ok", text: "theme set to " + name + "." }];
         },
+        life: () => {
+            const on = gameOfLife.toggle();
+            if (!on) return ["life: stopped."];
+            return reducedMotion
+                ? ["life: you prefer reduced motion, so here's a still frame. run `life` again to clear it."]
+                : [{ cls: "ok", text: "life: gliders released. run `life` again to stop." }];
+        },
+        conway: () => commands.life(),
         party: () => {
             document.body.classList.toggle("party");
             return [document.body.classList.contains("party") ? "🎉 party mode on (run `party` again to stop)" : "party's over."];

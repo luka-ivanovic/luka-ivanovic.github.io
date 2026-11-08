@@ -113,6 +113,28 @@ body::after{
         radial-gradient(35vw 60vh at 105% 65%, color-mix(in srgb, var(--navy) 30%, transparent), transparent 70%);
 }
 
+/* game of life drifting behind everything: a tiny canvas (1 px per cell) scaled up
+   with crisp edges, and a static mask that leaves a 2px gap around each 14px cell */
+#life{
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: -1;
+    pointer-events: none;
+    image-rendering: pixelated;
+    image-rendering: crisp-edges;
+    -webkit-mask-image:
+        linear-gradient(90deg, transparent 2px, #000 2px, #000 12px, transparent 12px),
+        linear-gradient(transparent 2px, #000 2px, #000 12px, transparent 12px);
+    -webkit-mask-size: 14px 14px;
+    -webkit-mask-composite: source-in;
+    mask-image:
+        linear-gradient(90deg, transparent 2px, #000 2px, #000 12px, transparent 12px),
+        linear-gradient(transparent 2px, #000 2px, #000 12px, transparent 12px);
+    mask-size: 14px 14px;
+    mask-composite: intersect;
+}
+
 /* vertical ad signs along the walkway */
 .signs{
     position: fixed;
