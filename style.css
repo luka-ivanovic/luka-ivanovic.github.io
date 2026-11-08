@@ -75,7 +75,6 @@
 html{
     scroll-behavior: smooth;
     scroll-padding-top: 3.5rem;
-    scroll-snap-type: y proximity;
     scrollbar-color: var(--line) var(--bg);
 }
 
@@ -301,7 +300,6 @@ a:hover{
 
 .hero{
     min-height: calc(100vh - 60px);
-    scroll-snap-align: start;
     padding: 4rem 1rem 3rem;
 }
 
@@ -373,12 +371,6 @@ pre{
     text-align: center;
 }
 
-.status-dot{
-    color: #3ddc97;
-    margin-right: 0.3rem;
-    text-shadow: 0 0 6px #3ddc97;
-}
-
 .hero-actions{
     display: flex;
     flex-wrap: wrap;
@@ -418,7 +410,6 @@ pre{
     max-width: var(--max);
     margin: 0 auto;
     padding: 5rem 1.5rem;
-    scroll-snap-align: start;
 }
 
 .cmd{
@@ -768,10 +759,6 @@ kbd{
     opacity: 0.85;
 }
 
-.blink-dot{
-    color: var(--accent);
-    animation: blink 2s steps(1) infinite;
-}
 
 /* ---------- responsive ---------- */
 
@@ -841,7 +828,6 @@ kbd{
 
 @media (max-width: 640px){
     html{
-        scroll-snap-type: y proximity;
         scroll-padding-top: 6rem;
     }
 
